@@ -1,0 +1,19 @@
+{
+	"info": {
+		"_postman_id": "13eb249d-de70-47af-8ae5-d2519eaa1280",
+		"name": "Book API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "48260452",
+		"_collection_link": "https://bearforestshadow-7271823.postman.co/workspace/Mary's-Workspace~70537d96-bc27-4e83-88ab-61ad13d9e4e8/collection/48260452-13eb249d-de70-47af-8ae5-d2519eaa1280?action=share&source=collection_link&creator=48260452"
+	},
+	"item": [
+		{
+			"name": "Django",
+			"item": []
+		},
+		{
+			"name": "Spring Boot",
+			"item": []
+		}
+	]
+}
