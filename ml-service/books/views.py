@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from book_vectors import BookVectorizer
 from .models import Book
 from .serializers import BookSerializer
 
@@ -44,3 +45,23 @@ def book_detail(request, pk):
     elif request.method == 'DELETE':
         book.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET'])
+def similar_books(request, book_id):
+    try:
+        target_book = Book.objects.get(pk=book_id)
+        all_books = Book.objects.all()
+
+        vectorizer = BookVectorizer()
+        similar = vectorizer.find_similar_books(
+            {'title': target_book.title, 'pages': target_book.pages, 'publication_year': target_book.publication_year,
+             'rating': target_book.rating},
+            [{'title': b.title, 'pages': b.pages, 'publication_year': b.publication_year, 'rating': b.rating}
+             for b in all_books if b != target_book]
+        )
+        # Возвращаем ID похожих книг и их сходство
+        result = [{'title': book['title'], 'similarity': similarity} for book, similarity in similar]
+        return Response(result)
+
+    except Book.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
