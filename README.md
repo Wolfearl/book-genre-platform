@@ -18,6 +18,7 @@
 - [Установка и запуск](#-установка-и-запуск)
 - [API](#-api)
 - [Лицензия](#-лицензия)
+- [Прогресс](#-прогресс)
 
 ## 🏗️ Архитектура
 
@@ -28,6 +29,7 @@ book-genre-platform/
 ├── backend-service/          # Java-микросервис (Spring Boot) - Основной API для CRUD операций с книгами
 ├── ml-service/               # Python-микросервис (Django) - Микросервис для ML-предсказаний
 ├── infrastructure/           # Конфигурация Docker Compose для оркестрации сервисов
+├── algorithms/               # Решение алгоритмических задач на Python и Java
 ├── docs/                     # Дополнительная документация
 └── README.md                 # Этот файл
 ```
@@ -159,3 +161,18 @@ python manage.py runserver
 
 ## 📄 Лицензия
 Этот проект распространяется под лицензией MIT. Подробнее см. в файле LICENSE.
+
+## 📊 Прогресс
+
+### День 5: English & Algorithms
+
+#### English Practice
+- Studied Django documentation: [Writing your first Django app](https://docs.djangoproject.com/en/stable/intro/tutorial01/)
+- Studied Spring Boot documentation: [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
+
+#### Algorithms Solved ([LeetCode](https://leetcode.com/))
+- [Two Sum](https://leetcode.com/problems/two-sum/) - Easy
+- [Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/) - Easy
+- [Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array/) - Easy
+- [Valid Palindrome](https://leetcode.com/problems/valid-palindrome/) - Easy
+- [Reverse String](https://leetcode.com/problems/reverse-string/) - Easy
