@@ -1,5 +1,5 @@
 .idea/
-.class
+*.class
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar

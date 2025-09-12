@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.booklibrary.bookapi.model.Book;
 import com.booklibrary.bookapi.repository.BookRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
@@ -26,6 +28,7 @@ public class BookController {
     private BookRepository bookRepository;
 
     // GET все книги
+    @Operation(summary = "Get all books")
     @GetMapping
     public ResponseEntity<List<Book>> getAllBooks() {
         try {
@@ -40,6 +43,7 @@ public class BookController {
     }
 
     // GET книга по ID
+    @Operation(summary = "Get book by ID")
     @GetMapping("/{id}")
     public ResponseEntity<Book> getBookById(@PathVariable("id") long id) {
         Optional<Book> bookData = bookRepository.findById(id);
@@ -47,6 +51,7 @@ public class BookController {
     }
 
     // POST создание новой книги
+    @Operation(summary = "Create a new book")
     @PostMapping
     public ResponseEntity<Book> createBook(@RequestBody Book book) {
         try {
@@ -58,6 +63,7 @@ public class BookController {
     }
 
     // PUT обновление книги
+    @Operation(summary = "Update book by ID")
     @PutMapping("/{id}")
     public ResponseEntity<Book> updateBook(@PathVariable("id") long id, @RequestBody Book book){
         Optional<Book> bookData = bookRepository.findById(id);
@@ -72,6 +78,7 @@ public class BookController {
     }
 
     // DELETE удаление книги
+    @Operation(summary = "Delete book by ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteBook(@PathVariable("id") long id){
         try {

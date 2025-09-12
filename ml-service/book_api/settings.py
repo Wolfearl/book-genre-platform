@@ -36,9 +36,10 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles', # нужно для обслуживания css/js Swagger UI
     'rest_framework',
     'books',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [

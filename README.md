@@ -8,171 +8,186 @@
 [![Postman](https://img.shields.io/badge/Postman-11.62.4-orange.svg)](https://www.postman.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Учебный проект, представляющий собой платформу для управления книгами и предсказания их жанров с помощью машинного обучения. Построен по микросервисной архитектуре с использованием Java Spring Boot и Python Django.
+A training project that serves as a platform for managing books and predicting their genres using machine learning. It is built with a microservices architecture, leveraging Java Spring Boot and Python Django.
 
-## 📋 Оглавление
+## 📋 Table of Contents
 
-- [Архитектура](#-архитектура)
-- [Технологический стек](#-технологический-стек)
-- [Функциональность](#-функциональность)
-- [Установка и запуск](#-установка-и-запуск)
+- [Architecture](#-architecture)
+- [Technology stack](#-technology-stack)
+- [Functionality](#-functionality)
+- [Installation and launch](#-installation-and-launch)
 - [API](#-api)
-- [Лицензия](#-лицензия)
-- [Прогресс](#-прогресс)
+- [License](#-license)
+- [Progress](#-progress)
+- [Testing the Integration](#-testing-the-integration)
 
-## 🏗️ Архитектура
+## 🏗️ Architecture
 
-Проект использует микросервисную архитектуру для обеспечения масштабируемости и гибкости:
+The project employs a microservices architecture to ensure scalability and flexibility:
 
 ```plaintext
 book-genre-platform/
-├── backend-service/          # Java-микросервис (Spring Boot) - Основной API для CRUD операций с книгами
-├── ml-service/               # Python-микросервис (Django) - Микросервис для ML-предсказаний
-├── infrastructure/           # Конфигурация Docker Compose для оркестрации сервисов
-├── algorithms/               # Решение алгоритмических задач на Python и Java
-├── docs/                     # Дополнительная документация
-└── README.md                 # Этот файл
+├── backend-service/          # Java microservice (Spring Boot) – The main API for CRUD operations with books
+├── ml-service/               # Python microservice (Django) – Microservice for ML predictions
+├── infrastructure/           # Docker Compose configuration for orchestrating services
+├── algorithms/               # Solving algorithmic problems using Python and Java
+├── docs/                     # Additional Documentation
+├── integration-test.sh       # Script for integration testing
+└── README.md                 # This file
 ```
 
-## 🛠️ Технологический стек
+## 🛠️ Technology stack
 
 ### Backend Service (Java)
 
 - Java 24.0.1
 - Spring Boot 3.5.5
-- Spring Data JPA - для работы с базой данных
-- H2 Database - встроенная БД для разработки
-- Maven - для сборки проекта
+- Spring Data JPA - for working with the database
+- H2 Database - embedded database for development
+- Maven - for project build purposes
 
 ### ML Service (Python)
 
 - Python 3.12.5
-- Django 5.2.6 - веб-фреймворк
-- Django REST Framework (DRF) - для создания REST API
-- SQLite - база данных по умолчанию для разработки
-- Pip - для управления зависимостями
+- Django 5.2.6 - web framework
+- Django REST Framework (DRF) - for building a REST API
+- SQLite - the default database for development
+- Pip - for dependency management
 
-### Общие инструменты
+### General Tools
 
-- Git - контроль версий
-- Docker - контейнеризация
-- Docker Compose - оркестрация контейнеров
-- Postman - тестирование API
+- Git - version control
+- Docker - containerization
+- Docker Compose - container orchestration
+- Postman - API testing
 
-### 📊 Функциональность
+### 📊 Functionality
 
-### Текущая функциональность (Неделя 1)
+### Current Functionality (Week 1)
 
-- Backend Service: CRUD операции для книг (создание, чтение, обновление, удаление) через REST API
-- ML Service: CRUD операции для книг (создание, чтение, обновление, удаление) через REST API
+- Backend Service: CRUD operations for books (create, read, update, delete) via REST API
+- ML Service:  CRUD operations for books (create, read, update, delete) via REST API, search for similar books
 
-### Планируемая функциональность
+### Planned Functionality
 
-- Интеграция ML-модели для предсказания жанра книги
-- Взаимодействие между микросервисами
-- Контейнеризация приложений с помощью Docker
-- Настройка CI/CD с помощью GitHub Actions
+- Integration of an ML model for book genre prediction
+- Interaction between microservices
+- Application containerization using Docker
+- CI/CD setup with GitHub Actions
 
-## 🚀 Установка и запуск
+## 🚀 Installation and launch
 
-### Предварительные требования
+### Prerequisites
 
-- Установите Java 24.0.1 или OpenJDK 24
-- Установите Python 3.12.5
-- Установите Git
+- Install Java 24.0.1 or OpenJDK 24
+- Install Python 3.12.5
+- Install Git
 
-### Запуск Backend Service (Java)
+### Starting the Backend Service (Java)
 
-1. Перейдите в директорию backend-service:
 ```bash
 cd backend-service
+./mvnw spring-boot:run
 ```
-2. Соберите проект с помощью Maven:
-```bash
-./mvnw clean package
-```
-3. Запустите приложение.
 
-Сервис будет доступен по адресу: http://localhost:8080
+The service will be accessible at the following address: http://localhost:8080
 
-### Запуск ML Service (Python)
+### Starting the ML Service (Python)
 
-1. Перейдите в директорию ml-service:
+1. Go to the directory ml-service:
 ```bash
 cd ml-service
 ```
-2. Создайте виртуальное окружение и активируйте его:
+2. Create a virtual environment and activate it:
 ```bash
 python -m venv venv
-source venv/bin/activate   # для Linux/macOS
-# или
-venv\Scripts\activate      # для Windows
+source venv/bin/activate   # for Linux/macOS
+# or
+venv\Scripts\activate      # for Windows
 ```
-3. Установите зависимости:
+3. Install the dependencies:
 ```bash
 pip install -r requirements.txt
 ```
-4. Примените миграции:
+4. Apply the migrations:
 ```bash
 python manage.py migrate
 ```
-5. Запустите сервер:
+5. Start the server:
 ```bash
 python manage.py runserver
 ```
 
-Сервис будет доступен по адресу: http://localhost:8000
+The service will be accessible at the following address: http://localhost:8000
 
 ## 📡 API
 
 ### Backend Service (Java)
 
-- GET /api/books - получить список всех книг
-- POST /api/books - создать новую книгу
-- GET /api/books/{id} - получить книгу по ID
-- PUT /api/books/{id} - обновить книгу по ID
-- DELETE /api/books/{id} - удалить книгу по ID
+- GET /api/books - Get all books
+- POST /api/books - Create a new book
+- GET /api/books/{id} - Get book by ID
+- PUT /api/books/{id} - Update book by ID
+- DELETE /api/books/{id} - Delete a book by ID
+- GET /api/genres/predictGenre - Get the predicted book genre
 
-Пример тела запроса для создания книги (JSON):
+Example of a request body for creating a book (JSON):
 ```json
 {
-  "title": "Название книги",
-  "author": "Автор книги",
+  "title": "The title of the book",
+  "author": "The author of the book",
   "publicationYear": 2023
 }
 ```
 
+Example of an HTTP request for genre prediction:
+```bash
+curl http://localhost:8080/api/genres/predictGenre?title=Python+Programming
+```
+
 ### ML Service (Python)
 
-- GET /api/books/ - получить список всех книг
-- POST /api/books/ - создать новую книгу
-- GET /api/books/{id}/ - получить книгу по ID
-- PUT /api/books/{id}/ - обновить книгу по ID
-- DELETE /api/books/{id}/ - удалить книгу по ID
+- GET /api/books/ - Get all books
+- POST /api/books/ - Create a new book
+- GET /api/books/{id}/ - Get book by ID
+- PUT /api/books/{id}/ - Update book by ID
+- DELETE /api/books/{id}/ - Delete a book by ID
+- GET /api/predict?title=Book+Title - Predict genre
+- GET /api/books/similar/{book_id}/ - Get similar books
 
-Пример тела запроса для создания книги (JSON):
+Example of a request body for creating a book (JSON):
 ```json
 {
-  "title": "Название книги",
-  "author": "Автор книги",
-  "publication_year": 2023
+  "title": "The title of the book",
+  "author": "The author of the book",
+  "publication_year": 2022
 }
 ```
 
-## 📄 Лицензия
-Этот проект распространяется под лицензией MIT. Подробнее см. в файле LICENSE.
+Example of an HTTP request for genre prediction:
+```bash
+curl http://localhost:8000/api/predict?title=Python+Programming
+```
 
-## 📊 Прогресс
+## 📄 License
+This project is licensed under the MIT License. For more details, please refer to the LICENSE file.
 
-### День 5: English & Algorithms
+## 📊 Progress
 
-#### English Practice
-- Studied Django documentation: [Writing your first Django app](https://docs.djangoproject.com/en/stable/intro/tutorial01/)
-- Studied Spring Boot documentation: [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
+### Day 6: Service integration and Documentation
 
-#### Algorithms Solved ([LeetCode](https://leetcode.com/))
-- [Two Sum](https://leetcode.com/problems/two-sum/) - Easy
-- [Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/) - Easy
-- [Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array/) - Easy
-- [Valid Palindrome](https://leetcode.com/problems/valid-palindrome/) - Easy
-- [Reverse String](https://leetcode.com/problems/reverse-string/) - Easy
+- An MLService has been created in Spring Boot that can make HTTP requests to an external ML server (Python backend) to obtain a book genre prediction based on its title.
+- To achieve this, a [RestTemplate](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html) object - a synchronous HTTP client provided by Spring - is injected into MLService via its constructor. The ML service URL is configured using the @Value annotation, with a default value of "http://localhost:8000/".
+- Added a GenrePredictionController to prevent query conflicts.
+- The method predictGenre constructs the URL by appending the title parameter with the book’s name and performs a GET request to the ML service using restTemplate.getForObject, expecting a string response.
+- In the RestTemplateConfig configuration class, a RestTemplate bean is created and registered so that Spring can inject it into other components.
+- In the Python service (ml-service), an endpoint for prediction has been added and the URLs have been updated.
+- [Swagger/OpenAPI](https://learn.openapis.org) documentation has been added.
+
+## 🧪 Testing the Integration
+
+1. Start both services
+2. Predict genre using the Python service from Java service:
+```bash
+curl http://localhost:8080/api/genres/predictGenre?title=Python+Programming
+```

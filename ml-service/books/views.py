@@ -65,3 +65,17 @@ def similar_books(request, book_id):
 
     except Book.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+def predict_genre(request):
+    title = request.GET.get('title', '')
+
+    # Здесь будет реальная ML-логика, пока заглушка
+    if 'java' in title.lower() or 'python' in title.lower():
+        prediction = 'Programming'
+    elif 'любовь' in title.lower():
+        prediction = 'Romance'
+    else:
+        prediction = 'Fiction'
+
+    return Response({'title' : title, 'prediction_genre': prediction})
