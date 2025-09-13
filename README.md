@@ -77,11 +77,11 @@ graph TD
 
 - Backend Service: CRUD operations for books (create, read, update, delete) via REST API
 - ML Service:  CRUD operations for books (create, read, update, delete) via REST API, search for similar books
+- Interaction between microservices
 
 ### Planned Functionality
 
 - Integration of an ML model for book genre prediction
-- Interaction between microservices
 - Application containerization using Docker
 - CI/CD setup with GitHub Actions
 
@@ -146,7 +146,9 @@ Example of a request body for creating a book (JSON):
 {
   "title": "The title of the book",
   "author": "The author of the book",
-  "publicationYear": 2023
+  "publicationYear": 2023,
+  "pages": 120,
+  "rating": 4.1
 }
 ```
 
@@ -170,7 +172,9 @@ Example of a request body for creating a book (JSON):
 {
   "title": "The title of the book",
   "author": "The author of the book",
-  "publication_year": 2022
+  "publication_year": 2022,
+  "pages": 240,
+  "rating": 4.2
 }
 ```
 
