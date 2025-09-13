@@ -20,6 +20,7 @@ A training project that serves as a platform for managing books and predicting t
 - [License](#-license)
 - [Progress](#-progress)
 - [Testing the Integration](#-testing-the-integration)
+- [Troubleshooting](#-troubleshooting)
 
 ## 🏗️ Architecture
 
@@ -34,6 +35,15 @@ book-genre-platform/
 ├── docs/                     # Additional Documentation
 ├── integration-test.sh       # Script for integration testing
 └── README.md                 # This file
+```
+
+```mermaid
+graph TD
+    Client[Web Client] --> JavaAPI[Java Spring Boot API]
+    Client --> PythonAPI[Python Django API]
+    JavaAPI --> JavaDB[(H2 Database)]
+    PythonAPI --> PythonDB[(SQLite Database)]
+    JavaAPI -.-> PythonAPI
 ```
 
 ## 🛠️ Technology stack
@@ -174,15 +184,33 @@ This project is licensed under the MIT License. For more details, please refer t
 
 ## 📊 Progress
 
-### Day 6: Service integration and Documentation
+### Week 1 Completion Status
 
-- An MLService has been created in Spring Boot that can make HTTP requests to an external ML server (Python backend) to obtain a book genre prediction based on its title.
-- To achieve this, a [RestTemplate](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html) object - a synchronous HTTP client provided by Spring - is injected into MLService via its constructor. The ML service URL is configured using the @Value annotation, with a default value of "http://localhost:8000/".
-- Added a GenrePredictionController to prevent query conflicts.
-- The method predictGenre constructs the URL by appending the title parameter with the book’s name and performs a GET request to the ML service using restTemplate.getForObject, expecting a string response.
-- In the RestTemplateConfig configuration class, a RestTemplate bean is created and registered so that Spring can inject it into other components.
-- In the Python service (ml-service), an endpoint for prediction has been added and the URLs have been updated.
-- [Swagger/OpenAPI](https://learn.openapis.org) documentation has been added.
+#### Python/Django Service
+- [x] Project setup and configuration
+- [x] Data models and migrations
+- [x] REST API endpoints
+- [x] Serializers and views
+- [ ] Tests (0% covered)
+
+#### Java/Spring Boot Service
+- [x] Project setup with Spring Initializr
+- [x] JPA entities and repositories
+- [x] REST controllers
+- [x] Basic error handling
+- [ ] Tests (0% covered)
+
+#### General Skills
+- [x] Linear algebra fundamentals for ML
+- [x] Reading technical documentation in English
+- [x] Solving algorithmic problems on LeetCode
+- [x] API documentation with Swagger/OpenAPI
+- [x] Project documentation best practices
+
+#### Week 1 Statistics
+- Commits: 10+
+- Hours spent: 35-40
+- LeetCode problems solved: 5
 
 ## 🧪 Testing the Integration
 
@@ -191,3 +219,22 @@ This project is licensed under the MIT License. For more details, please refer t
 ```bash
 curl http://localhost:8080/api/genres/predictGenre?title=Python+Programming
 ```
+
+## 🐛 Troubleshooting
+
+### Port Already in Use Error
+
+If port 8080 or 8000 is occupied, change the port in the settings:
+
+**Java-service**: add to application.properties:
+```properties
+server.port=8081
+```
+**Python-service**: run with a different port:
+```bash
+python manage.py runserver 8001
+```
+
+### Database connection errors
+
+Make sure that the database is running and accessible.
