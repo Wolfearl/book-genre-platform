@@ -6,5 +6,6 @@ urlpatterns = [
     path('books/similar/<int:book_id>/', views.similar_books, name='similar-books'),
     path('books/<int:pk>/', views.book_detail, name='book-detail'),
     path('books/', views.book_list, name='books-list'),
-    path('predict/', views.predict_genre, name='predict-genre')
+    path('predict/', views.predict_genre, name='predict-genre'),
+    path('health/', views.health_check, name='health-check')
 ]

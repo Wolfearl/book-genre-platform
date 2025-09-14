@@ -6,6 +6,8 @@
 [![Django](https://img.shields.io/badge/Django-5.2.6-green.svg)](https://www.djangoproject.com/)
 [![Django REST Framework](https://img.shields.io/badge/DRF-3.16.1-red.svg)](https://www.django-rest-framework.org/)
 [![Postman](https://img.shields.io/badge/Postman-11.62.4-orange.svg)](https://www.postman.com/)
+[![Docker](https://img.shields.io/badge/Docker-4.46.0-blue.svg)](https://www.docker.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16.10-purple.svg)](https://www.postgresql.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A training project that serves as a platform for managing books and predicting their genres using machine learning. It is built with a microservices architecture, leveraging Java Spring Boot and Python Django.
@@ -18,7 +20,6 @@ A training project that serves as a platform for managing books and predicting t
 - [Installation and launch](#-installation-and-launch)
 - [API](#-api)
 - [License](#-license)
-- [Progress](#-progress)
 - [Testing the Integration](#-testing-the-integration)
 - [Troubleshooting](#-troubleshooting)
 
@@ -73,11 +74,13 @@ graph TD
 
 ### 📊 Functionality
 
-### Current Functionality (Week 1)
+### Current Functionality (Week 2)
 
 - Backend Service: CRUD operations for books (create, read, update, delete) via REST API
 - ML Service:  CRUD operations for books (create, read, update, delete) via REST API, search for similar books
 - Interaction between microservices
+- PostgreSQL is installed via Docker
+- Java services (Spring Boot) and Python service (Django) are configured to work with PostgreSQL
 
 ### Planned Functionality
 
@@ -92,6 +95,8 @@ graph TD
 - Install Java 24.0.1 or OpenJDK 24
 - Install Python 3.12.5
 - Install Git
+- Install Docker 4.46.0
+- Install PostgreSQL 16.10
 
 ### Starting the Backend Service (Java)
 
@@ -130,6 +135,13 @@ python manage.py runserver
 
 The service will be accessible at the following address: http://localhost:8000
 
+### Starting the Docker
+
+```bash
+cd infrastructure
+docker-compose -f docker-compose.db.yml up -d
+```
+
 ## 📡 API
 
 ### Backend Service (Java)
@@ -140,6 +152,7 @@ The service will be accessible at the following address: http://localhost:8000
 - PUT /api/books/{id} - Update book by ID
 - DELETE /api/books/{id} - Delete a book by ID
 - GET /api/genres/predictGenre - Get the predicted book genre
+- GET /api/health/db - Check the connection to the database
 
 Example of a request body for creating a book (JSON):
 ```json
@@ -166,6 +179,7 @@ curl http://localhost:8080/api/genres/predictGenre?title=Python+Programming
 - DELETE /api/books/{id}/ - Delete a book by ID
 - GET /api/predict?title=Book+Title - Predict genre
 - GET /api/books/similar/{book_id}/ - Get similar books
+- GET /api/health/ - Check the connection to the database
 
 Example of a request body for creating a book (JSON):
 ```json
@@ -185,36 +199,6 @@ curl http://localhost:8000/api/predict?title=Python+Programming
 
 ## 📄 License
 This project is licensed under the MIT License. For more details, please refer to the LICENSE file.
-
-## 📊 Progress
-
-### Week 1 Completion Status
-
-#### Python/Django Service
-- [x] Project setup and configuration
-- [x] Data models and migrations
-- [x] REST API endpoints
-- [x] Serializers and views
-- [ ] Tests (0% covered)
-
-#### Java/Spring Boot Service
-- [x] Project setup with Spring Initializr
-- [x] JPA entities and repositories
-- [x] REST controllers
-- [x] Basic error handling
-- [ ] Tests (0% covered)
-
-#### General Skills
-- [x] Linear algebra fundamentals for ML
-- [x] Reading technical documentation in English
-- [x] Solving algorithmic problems on LeetCode
-- [x] API documentation with Swagger/OpenAPI
-- [x] Project documentation best practices
-
-#### Week 1 Statistics
-- Commits: 10+
-- Hours spent: 35-40
-- LeetCode problems solved: 5
 
 ## 🧪 Testing the Integration
 
@@ -242,3 +226,16 @@ python manage.py runserver 8001
 ### Database connection errors
 
 Make sure that the database is running and accessible.
+
+To add test data to the empty database, run load_test_data or DataLoader, for example:
+```bash
+python manage.py load_test_data
+```
+
+Check database connections:
+- Java: http://localhost:8080/api/health/db
+- Python: http://localhost:8000/api/health/
+
+Check API functionality:
+- Java: http://localhost:8080/api/books
+- Python: http://localhost:8000/api/books/

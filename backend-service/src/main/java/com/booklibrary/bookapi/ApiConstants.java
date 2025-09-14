@@ -5,4 +5,5 @@ public class ApiConstants {
     public static final String BOOKS_ENDPOINT = "/books";
     public static final String PREDICT_PREFIX = "/genres";
     public static final String PREDICT_ENDPOINT = "/predictGenre";
+    public static final String HEALTH_ENDPOINT = "/health";
 }

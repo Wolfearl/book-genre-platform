@@ -1,5 +1,4 @@
 from django.db import models
-
 from constants import MAX_BOOK_TITLE_LENGTH, MAX_BOOK_AUTHOR_LENGTH, DEFAULT_BOOK_PAGES, DEFAULT_BOOK_RATING
 
 

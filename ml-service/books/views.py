@@ -1,14 +1,14 @@
 from django.core.serializers import serialize
+from django.db import connection
 from django.shortcuts import render
-
-# Create your views here.
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
 from book_vectors import BookVectorizer
 from .models import Book
 from .serializers import BookSerializer
+
+# Create your views here.
 
 
 @api_view(['GET', 'POST'])
@@ -125,3 +125,21 @@ def predict_genre(request):
         prediction = 'Fiction'
 
     return Response({'title': title, 'prediction_genre': prediction})
+
+
+@api_view(['GET'])
+def health_check(request):
+    """
+    Handles a GET request to check the health status of the database connection.
+
+    :param request: The HTTP request object passed to the view
+    :type request: django.http.HttpRequest
+    :return: JSON with the status
+    :rtype: Response
+    """
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+        return Response({"status": "Database connection is OK"})
+    except Exception as e:
+        return Response({"status": f"Database connection failed: {str(e)}"})

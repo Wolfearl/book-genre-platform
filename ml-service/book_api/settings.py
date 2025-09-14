@@ -11,8 +11,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-
 from constants import DEFAULT_PAGE_SIZE
+import environ
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -77,10 +78,20 @@ WSGI_APPLICATION = 'book_api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# Initialization of environ
+env = environ.Env()
+environ.Env.read_env()
+
+# Database Settings
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': env('DB_ENGINE', default='django.db.backends.sqlite3'),
+        'NAME': env('DB_NAME', default=os.path.join(BASE_DIR, 'db.sqlite3')),
+        'USER': env('DB_USER', default=''),
+        'PASSWORD': env('DB_PASSWORD', default=''),
+        'HOST': env('DB_HOST', default=''),
+        'PORT': env('DB_PORT', default=''),
     }
 }
 
