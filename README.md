@@ -42,8 +42,8 @@ book-genre-platform/
 graph TD
     Client[Web Client] --> JavaAPI[Java Spring Boot API]
     Client --> PythonAPI[Python Django API]
-    JavaAPI --> JavaDB[(H2 Database)]
-    PythonAPI --> PythonDB[(SQLite Database)]
+    JavaAPI --> JavaDB[(PostgreSQL)]
+    PythonAPI --> PythonDB[(PostgreSQL)]
     JavaAPI -.-> PythonAPI
 ```
 
@@ -54,7 +54,8 @@ graph TD
 - Java 24.0.1
 - Spring Boot 3.5.5
 - Spring Data JPA - for working with the database
-- H2 Database - embedded database for development
+- PostgreSQL 16.10
+- Flywaydb - for version control of the database schema (migrations)
 - Maven - for project build purposes
 
 ### ML Service (Python)
@@ -62,7 +63,7 @@ graph TD
 - Python 3.12.5
 - Django 5.2.6 - web framework
 - Django REST Framework (DRF) - for building a REST API
-- SQLite - the default database for development
+- PostgreSQL 16.10
 - Pip - for dependency management
 
 ### General Tools
@@ -227,7 +228,7 @@ python manage.py runserver 8001
 
 Make sure that the database is running and accessible.
 
-To add test data to the empty database, run load_test_data or DataLoader, for example:
+To add test data to the empty database, run load_test_data:
 ```bash
 python manage.py load_test_data
 ```
