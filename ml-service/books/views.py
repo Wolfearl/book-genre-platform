@@ -1,10 +1,11 @@
-from django.core.serializers import serialize
 from django.db import connection
-from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from book_vectors import BookVectorizer
+from scripts.regsetup import description
+
+from additionally.book_vectors import BookVectorizer
+from training.predictor import BookGenrePredictor
 from .models import Book
 from .serializers import BookSerializer
 
@@ -103,6 +104,8 @@ def similar_books(request, book_id):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
+predictor = BookGenrePredictor()
+
 @api_view(['GET'])
 def predict_genre(request):
     """
@@ -111,20 +114,32 @@ def predict_genre(request):
 
     :param request: HTTP request
     :type request: django.http.HttpRequest
-    :return: JSON response with the book's title and genre
+    :return: JSON response with the book's title and genres
     :rtype: Response
     """
-    title = request.GET.get('title', '')
+    try:
+        data = request.data
 
-    # Here will be the real ML logic; for now, it's a placeholder.
-    if 'java' in title.lower() or 'python' in title.lower():
-        prediction = 'Programming'
-    elif 'любовь' in title.lower():
-        prediction = 'Romance'
-    else:
-        prediction = 'Fiction'
+        title = data.get('title', '')
+        description = data.get('description', '')
+        rating = data.get('rating', 0.0)
 
-    return Response({'title': title, 'prediction_genre': prediction})
+        title_length = len(title)
+        description_length = len(description)
+
+        result = predictor.predict(
+            title=title,
+            title_length=title_length,
+            description=description,
+            description_length=description_length,
+            rating=rating
+        )
+        return Response(result)
+    except Exception as e:
+        return Response(
+            {'error': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 
 @api_view(['GET'])

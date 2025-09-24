@@ -82,10 +82,10 @@ graph TD
 - Interaction between microservices
 - PostgreSQL is installed via Docker
 - Java services (Spring Boot) and Python service (Django) are configured to work with PostgreSQL
+- Integration of an ML model for book genre prediction
 
 ### Planned Functionality
 
-- Integration of an ML model for book genre prediction
 - Application containerization using Docker
 - CI/CD setup with GitHub Actions
 
@@ -206,7 +206,7 @@ This project is licensed under the MIT License. For more details, please refer t
 1. Start both services
 2. Predict genre using the Python service from Java service:
 ```bash
-curl http://localhost:8080/api/genres/predictGenre?title=Python+Programming
+curl http://localhost:8080/api/genres/predictGenre?title=Shadows+Over+Skyline&description=In+the+bustling+metropolis+of+Skyline+City%2C+a+determined+detective+and+a+tech-savvy+journalist+team+up+to+uncover+a+sprawling+conspiracy+that+threatens+the+very+fabric+of+their+society.+Against+a+backdrop+of+political+corruption%2C+high-stakes+corporate+warfare%2C+and+deep+personal+secrets%2C+they+must+use+their+skills%2C+wit%2C+and+courage+to+expose+the+truth.+Combining+elements+of+thriller%2C+crime%2C+and+political+drama%2C+this+gripping+tale+explores+themes+of+justice%2C+trust%2C+and+resilience+in+a+modern+urban+setting.&rating=4/api/predict?title=Shadows+Over+Skyline&description=In+the+bustling+metropolis+of+Skyline+City%2C+a+determined+detective+and+a+tech-savvy+journalist+team+up+to+uncover+a+sprawling+conspiracy+that+threatens+the+very+fabric+of+their+society.+Against+a+backdrop+of+political+corruption%2C+high-stakes+corporate+warfare%2C+and+deep+personal+secrets%2C+they+must+use+their+skills%2C+wit%2C+and+courage+to+expose+the+truth.+Combining+elements+of+thriller%2C+crime%2C+and+political+drama%2C+this+gripping+tale+explores+themes+of+justice%2C+trust%2C+and+resilience+in+a+modern+urban+setting.&rating=4
 ```
 
 ## 🐛 Troubleshooting

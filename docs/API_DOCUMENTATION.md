@@ -70,13 +70,17 @@ Get the predicted book genre.
 
 Parameters:
 - **title** (string): The book title
+- **description** (string): The book description
+- **rating** (float): The book rating
 
 **Response:**
 ```json
 [
   {
-    "title": "Python Programming",
-    "predicted_genre": "Programming"
+    "title": "Shadows Over Skyline",
+    "description": "In the bustling metropolis of Skyline City, a determined detective and a tech-savvy journalist team up to uncover a sprawling conspiracy that threatens the very fabric of their society. Against a backdrop of political corruption, high-stakes corporate warfare, and deep personal secrets, they must use their skills, wit, and courage to expose the truth. Combining elements of thriller, crime, and political drama, this gripping tale explores themes of justice, trust, and resilience in a modern urban setting.",
+    "rating": 4.0,
+    "predicted_genre": "Fiction"
   }
 ]
 ```
@@ -122,8 +126,10 @@ Parameters:
 ```json
 [
   {
-    "title": "Python Programming",
-    "predicted_genre": "Programming"
+    "title": "Shadows Over Skyline",
+    "description": "In the bustling metropolis of Skyline City, a determined detective and a tech-savvy journalist team up to uncover a sprawling conspiracy that threatens the very fabric of their society. Against a backdrop of political corruption, high-stakes corporate warfare, and deep personal secrets, they must use their skills, wit, and courage to expose the truth. Combining elements of thriller, crime, and political drama, this gripping tale explores themes of justice, trust, and resilience in a modern urban setting.",
+    "rating": 4.0,
+    "predicted_genre": "Fiction"
   }
 ]
 ```
