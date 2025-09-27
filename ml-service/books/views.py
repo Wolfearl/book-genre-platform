@@ -1,11 +1,22 @@
+import time
 from django.db import connection
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from scripts.regsetup import description
 
 from additionally.book_vectors import BookVectorizer
+from services.ml_service import ml_service
+from services.monitoring import prediction_monitor
 from training.predictor import BookGenrePredictor
+from django.core.cache import cache
+
+from .serializers import (
+    PredictionRequestSerializer,
+    PredictionResponseSerializer,
+    BatchPredictionRequestSerializer,
+    ModelInfoSerializer
+)
+
 from .models import Book
 from .serializers import BookSerializer
 
@@ -106,38 +117,50 @@ def similar_books(request, book_id):
 
 predictor = BookGenrePredictor()
 
-@api_view(['GET'])
+@api_view(['POST'])
 def predict_genre(request):
     """
-    Processes a GET request for working with a book
-    (returns the title and genre of the book).
+    Genre prediction for one book.
 
     :param request: HTTP request
     :type request: django.http.HttpRequest
     :return: JSON response with the book's title and genres
     :rtype: Response
     """
+    start_time = time.time()
+
+    # Validation of input data
+    serializer = PredictionRequestSerializer(data=request.data)
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # Getting validated data
+    data = serializer.validated_data
+
+    # Making a prediction
     try:
-        data = request.data
-
-        title = data.get('title', '')
-        description = data.get('description', '')
-        rating = data.get('rating', 0.0)
-
-        title_length = len(title)
-        description_length = len(description)
-
-        result = predictor.predict(
-            title=title,
-            title_length=title_length,
-            description=description,
-            description_length=description_length,
-            rating=rating
+        result = ml_service.predict_single(
+            title=data['title'],
+            description=data.get('description', ''),
+            rating=data.get('rating', 0.0),
         )
-        return Response(result)
+
+        prediction_time = time.time() - start_time
+
+        # Recording in monitoring
+        if 'error' not in result:
+            prediction_monitor.record_prediction(True, prediction_time)
+            response_serializer = PredictionResponseSerializer(result)
+            return Response(response_serializer.data)
+        else:
+            prediction_monitor.record_prediction(False, prediction_time)
+            return Response(result, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     except Exception as e:
+        prediction_time = time.time() - start_time
+        prediction_monitor.record_prediction(False, prediction_time)
         return Response(
-            {'error': str(e)},
+            {'error': f'Internal server error: {str(e)}'},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
@@ -145,7 +168,7 @@ def predict_genre(request):
 @api_view(['GET'])
 def health_check(request):
     """
-    Handles a GET request to check the health status of the database connection.
+    Checking the health of the service.
 
     :param request: The HTTP request object passed to the view
     :type request: django.http.HttpRequest
@@ -155,6 +178,105 @@ def health_check(request):
     try:
         with connection.cursor() as cursor:
             cursor.execute("SELECT 1")
-        return Response({"status": "Database connection is OK"})
+
+        model_info = ml_service.get_model_info()
+        return Response({
+            'status': 'healthy',
+            'database': 'connected',
+            'ml_model': model_info['status'],
+            'timestamp': time.time()
+        })
     except Exception as e:
-        return Response({"status": f"Database connection failed: {str(e)}"})
+        return Response({
+            'status': 'unhealthy',
+            'error': str(e)
+        }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+
+@api_view(['POST'])
+def predict_batch(request):
+    """
+    Batch genre prediction for multiple books.
+
+    :param request: The HTTP request object passed to the view
+    :type request: django.http.HttpRequest
+    :return: JSON with the results
+    :rtype: Response
+    """
+    start_time = time.time()
+
+    # Validation of input data
+    serializer = BatchPredictionRequestSerializer(data=request.data)
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # Performing batch prediction
+    try:
+        results = ml_service.predict_batch(serializer.validated_data['books'])
+        prediction_time = time.time() - start_time
+
+        # Package statistics
+        successful = sum(1 for r in results if 'error' not in r)
+        failed = len(results) - successful
+
+        # Recording in monitoring
+        prediction_monitor.record_prediction(successful > 0, prediction_time)
+
+        return Response({
+            'results': results,
+            'batch_stats': {
+                'total': len(results),
+                'successful': successful,
+                'failed': failed,
+                'processing_time': prediction_time
+            }
+        })
+
+    except Exception as e:
+        prediction_time = time.time() - start_time
+        prediction_monitor.record_prediction(False, prediction_time)
+        return Response(
+            {'error': f'Batch prediction failed: {str(e)}'},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['GET'])
+def model_info(request):
+    """
+    Information about the loaded ML model.
+
+    :param request: The HTTP request object passed to the view
+    :type request: django.http.HttpRequest
+    :return: JSON with the model info
+    :rtype: Response
+    """
+    try:
+        m_info = ml_service.get_model_info()
+        serializer = ModelInfoSerializer(m_info)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response(
+            {'error': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['GET'])
+def prediction_stats(request):
+    """
+    Prediction statistics.
+
+    :param request: The HTTP request object passed to the view
+    :type request: django.http.HttpRequest
+    :return: JSON with the prediction statistics
+    :rtype: Response
+    """
+    try:
+        stats = prediction_monitor.get_stats()
+        return Response(stats)
+    except Exception as e:
+        return Response(
+            {'error': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )

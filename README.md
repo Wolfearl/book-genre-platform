@@ -75,7 +75,7 @@ graph TD
 
 ### 📊 Functionality
 
-### Current Functionality (Week 2)
+### Current Functionality
 
 - Backend Service: CRUD operations for books (create, read, update, delete) via REST API
 - ML Service:  CRUD operations for books (create, read, update, delete) via REST API, search for similar books
@@ -152,7 +152,7 @@ docker-compose -f docker-compose.db.yml up -d
 - GET /api/books/{id} - Get book by ID
 - PUT /api/books/{id} - Update book by ID
 - DELETE /api/books/{id} - Delete a book by ID
-- GET /api/genres/predictGenre - Get the predicted book genre
+- POST /api/genres/predictGenre - Get the predicted book genre
 - GET /api/health/db - Check the connection to the database
 
 Example of a request body for creating a book (JSON):
@@ -178,9 +178,12 @@ curl http://localhost:8080/api/genres/predictGenre?title=Python+Programming
 - GET /api/books/{id}/ - Get book by ID
 - PUT /api/books/{id}/ - Update book by ID
 - DELETE /api/books/{id}/ - Delete a book by ID
-- GET /api/predict?title=Book+Title - Predict genre
+- POST /api/predict/ - Genre prediction for one book
+- POST /api/predict/batch/ - Batch prediction for multiple books
 - GET /api/books/similar/{book_id}/ - Get similar books
-- GET /api/health/ - Check the connection to the database
+- GET /api/health/ - Checking the health of the service
+- GET /api/model/info/ - Information about the uploaded ML model
+- GET /api/predictions/stats/ - Prediction statistics
 
 Example of a request body for creating a book (JSON):
 ```json
@@ -193,11 +196,6 @@ Example of a request body for creating a book (JSON):
 }
 ```
 
-Example of an HTTP request for genre prediction:
-```bash
-curl http://localhost:8000/api/predict?title=Python+Programming
-```
-
 ## 📄 License
 This project is licensed under the MIT License. For more details, please refer to the LICENSE file.
 
@@ -206,7 +204,7 @@ This project is licensed under the MIT License. For more details, please refer t
 1. Start both services
 2. Predict genre using the Python service from Java service:
 ```bash
-curl http://localhost:8080/api/genres/predictGenre?title=Shadows+Over+Skyline&description=In+the+bustling+metropolis+of+Skyline+City%2C+a+determined+detective+and+a+tech-savvy+journalist+team+up+to+uncover+a+sprawling+conspiracy+that+threatens+the+very+fabric+of+their+society.+Against+a+backdrop+of+political+corruption%2C+high-stakes+corporate+warfare%2C+and+deep+personal+secrets%2C+they+must+use+their+skills%2C+wit%2C+and+courage+to+expose+the+truth.+Combining+elements+of+thriller%2C+crime%2C+and+political+drama%2C+this+gripping+tale+explores+themes+of+justice%2C+trust%2C+and+resilience+in+a+modern+urban+setting.&rating=4/api/predict?title=Shadows+Over+Skyline&description=In+the+bustling+metropolis+of+Skyline+City%2C+a+determined+detective+and+a+tech-savvy+journalist+team+up+to+uncover+a+sprawling+conspiracy+that+threatens+the+very+fabric+of+their+society.+Against+a+backdrop+of+political+corruption%2C+high-stakes+corporate+warfare%2C+and+deep+personal+secrets%2C+they+must+use+their+skills%2C+wit%2C+and+courage+to+expose+the+truth.+Combining+elements+of+thriller%2C+crime%2C+and+political+drama%2C+this+gripping+tale+explores+themes+of+justice%2C+trust%2C+and+resilience+in+a+modern+urban+setting.&rating=4
+POST http://localhost:8080/api/genres/predictGenre
 ```
 
 ## 🐛 Troubleshooting
