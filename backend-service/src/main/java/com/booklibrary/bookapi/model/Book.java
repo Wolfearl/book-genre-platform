@@ -6,12 +6,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Book entity mapped to the "books" table in the database.
  * Stores basic information about the book: identifier, title, author,
  * year of publication, number of pages and rating.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "books")
 public class Book {
@@ -23,7 +25,8 @@ public class Book {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    private String description;
+
     private String author;
 
     @Column(name = "publication_year")
@@ -53,6 +56,25 @@ public class Book {
         this.publicationYear = publicationYear;
         this.pages = pages;
         this.rating = rating;
+    }
+
+    /**
+     * Constructor for creating a book with basic parameters.
+     * 
+     * @param title The title of the book
+     * @param author The author of the book
+     * @param publicationYear The year of publication
+     * @param pages The number of pages
+     * @param rating The rating of the book
+     * @param description The description of the book
+     */
+    public Book(String title, String author, Integer publicationYear, Integer pages, Double rating, String description) {
+        this.title = title;
+        this.author = author;
+        this.publicationYear = publicationYear;
+        this.pages = pages;
+        this.rating = rating;
+        this.description = description;
     }
 
     /**
@@ -89,6 +111,24 @@ public class Book {
      */
     public void setTitle(String title) { 
         this.title = title; 
+    }
+
+    /**
+     * Returns the description of the book.
+     * 
+     * @param description The description of the book
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Sets the description of the book.
+     * 
+     * @param description The description of the book
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
     
     /**

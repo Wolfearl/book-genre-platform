@@ -1,18 +1,19 @@
 package com.booklibrary.bookapi.controller;
 
 import com.booklibrary.bookapi.ApiConstants;
+import com.booklibrary.bookapi.model.Book;
 import com.booklibrary.bookapi.service.MLService;
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 
 /**
  * Controller for predicting the genre of a book.
  * <p>
- * The controller provides an API endpoint to get the predicted genre
- * based on the book title.
+ * The controller provides an API endpoint to get the predicted genre.
  * <p>
  * Handles HTTP requests at the path "/api/genres".
  */
@@ -32,14 +33,13 @@ public class GenrePredictionController {
     }
 
     /**
-     * Returns the predicted genre of a book based on its title.
+     * Returns the predicted genre of a book.
      * 
-     * @param title The book title for predicting the genre
      * @return predicted genre of the book
      */
     @Operation(summary = "Get the predicted book genre")
-    @GetMapping(ApiConstants.PREDICT_ENDPOINT)
-    public String predictGenre(@RequestParam String title) {
-        return mlService.predictGenre(title);
+    @PostMapping(ApiConstants.PREDICT_ENDPOINT)
+    public String predictGenre(@RequestBody Book bookData) {
+        return mlService.predictGenre(bookData);
     }
 }
